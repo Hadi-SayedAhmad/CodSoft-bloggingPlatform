@@ -1,7 +1,7 @@
 import asyncHandler from "../middlewares/asyncHandler.js";
 import User from "../models/userModel.js"
 
-export const signUp = asyncHandler(async (req, res, next) => {
+export const signUp = asyncHandler(async (req, res) => {
     const { username, email, password } = req.body;
     const newUser = await User.create({
         username,
