@@ -9,15 +9,18 @@ import SignIn from './pages/SignIn.jsx'
 import SignUp from './pages/SignUp.jsx'
 import { store } from './store.js'
 import { Provider } from 'react-redux'
+import PrivateRoute from './pages/PrivateRoute.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<App />}>
       <Route path='/' index={true} element={<Home />}></Route>
-      <Route path='/profile' element={<Profile />}></Route>
       <Route path='/sign-in' element={<SignIn />}></Route>
       <Route path='/sign-up' element={<SignUp />}></Route>
+      <Route path='' element={<PrivateRoute />}>
+        <Route path='/profile' element={<Profile />} />
 
+      </Route>
 
     </Route>
   )

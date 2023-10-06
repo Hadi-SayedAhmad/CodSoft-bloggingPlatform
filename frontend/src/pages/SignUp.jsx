@@ -2,11 +2,16 @@ import { useState } from "react"
 import { Link } from "react-router-dom"
 import { toast } from "react-toastify"
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { signInStart, signInFailure, signInSuccess } from "../slices/userSlice";
 export default function SignUp() {
   const [formData, setFormData] = useState({});
-  const [loading, setLoading] = useState(false)
+  const {loading} = useSelector((state) => {
+    return state.user
+  })
   const navigate = useNavigate();
-
+  const dispatch = useDispatch()
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -16,7 +21,7 @@ export default function SignUp() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true)
+    dispatch(signInStart());
     try {
       const res = await fetch("/api/auth/signup", {
         method: "POST",
@@ -28,17 +33,17 @@ export default function SignUp() {
       
       const data = await res.json()
       if (data.success === false) {
-        setLoading(false)
+        dispatch(signInFailure())
         toast.error(data.message)
         return 
       } 
-      
-      toast.success(data);
-      setLoading(false)
-      navigate("/sign-in");
+      // console.log(data);
+      toast.success("Logged In!");
+      dispatch(signInSuccess(data))
+      navigate("/");
       // console.log(data);
     } catch (err) {
-      setLoading(false)
+      dispatch(signInFailure())
       toast.error(err.message)
     }
 
@@ -52,8 +57,7 @@ export default function SignUp() {
         <input type='text' placeholder='Username' className='border p-3 rounded-lg focus:outline-none' id='username' onChange={handleChange} />
         <input type='email' placeholder='Email' className='border p-3 rounded-lg focus:outline-none' id='email' onChange={handleChange} />
         <input type='password' placeholder='Password' className='border p-3 rounded-lg focus:outline-none' id='password' onChange={handleChange} />
-        <button disabled={loading} className='bg-slate-700 text-white p-3 rounded-lg hover:opacity-95 disabled:opacity-80'>{loading ? "LOADING..." : "Sign Up"}</button>
-
+        <button disabled={loading} className='bg-slate-700 text-white p-3 rounded-lg hover:opacity-95 disabled:opacity-80' onClick={handleChange} >{loading ? "LOADING..." : "Sign Up"}</button>
       </form>
       <div className='flex gap-2 mt-5'>
         <p>Already have an account?</p>
