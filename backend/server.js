@@ -1,8 +1,11 @@
 import express from "express";
 import dotenv from "dotenv"
 import connectDB from "./config/db.js"
+import cookieParser from "cookie-parser";
 const app = express();
+
 app.use(express.json())
+app.use(cookieParser());
 const port = 3000;
 dotenv.config();
 import {errorHandler} from "./middlewares/errorMiddleware.js"

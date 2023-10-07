@@ -1,8 +1,10 @@
-import express from "express";
-import { test } from "../controllers/userControllers.js";
+import express from "express"
+import { updateUserProfile } from "../controllers/userControllers.js";
+import { protect } from "../middlewares/authMiddleware.js";
 const router = express.Router();
 
+router.post("/update/:id", protect, updateUserProfile);
 
-router.get("/test", test);
+
 
 export default router;
