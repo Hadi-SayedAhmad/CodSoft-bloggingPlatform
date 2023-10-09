@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux"
 import { useState } from "react";
 import axios from "axios"
-import { updateUserStart, updateUserFailure, updateUserSuccess, deleteStart, deleteFailure, deleteSuccess } from "../slices/userSlice.js";
+import { updateUserStart, updateUserFailure, updateUserSuccess, deleteStart, deleteFailure, deleteSuccess, signOutStart, signOutSuccess, signOutFailure } from "../slices/userSlice.js";
 import { toast } from "react-toastify"
 import { useNavigate } from "react-router-dom"
 
@@ -67,6 +67,25 @@ export default function Profile() {
     }
   }
 
+  const handleSignOut = async (e) => {
+    dispatch(signOutStart())
+    try {
+      const res = await axios.get("/api/auth/signout");
+      if (res.success === false) {
+        toast.error(res.message);
+        dispatch(signOutFailure())
+        return;
+      } else {
+        dispatch(signOutSuccess());
+        toast.success(res.data);
+        navigate("/sign-in");
+      }
+    } catch (error) {
+      toast.error(error.message);
+      dispatch(signOutFailure());
+    }
+  }
+
 
   return (
     <div className="p-3 max-w-lg mx-auto">
@@ -79,7 +98,7 @@ export default function Profile() {
       </form>
       <div className="flex justify-between mt-5">
         <span onClick={handleDelete} className="text-red-700 cursor-pointer hover:opacity-95">Delete Account</span>
-        <span className="text-red-700 cursor-pointer hover:opacity-95">Sign Out</span>
+        <span onClick={handleSignOut} className="text-red-700 cursor-pointer hover:opacity-95">Sign Out</span>
       </div>
     </div>
   )

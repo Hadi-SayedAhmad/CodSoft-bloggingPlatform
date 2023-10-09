@@ -33,3 +33,17 @@ export const signIn = asyncHandler(async (req, res) => {
         throw new Error("Invalid email or passowrd!");
     }
 })
+
+
+export const signOut = asyncHandler(
+    async (req, res) => {
+        if (req.user) {
+            res.status(200).clearCookie("jwt").json(
+                "Signed Out!"
+            )
+        } else {
+            req.status(500);
+            throw new Error("Can not sign out!");
+        }
+    }
+)
