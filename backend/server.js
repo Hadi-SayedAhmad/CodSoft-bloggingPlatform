@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv"
 import connectDB from "./config/db.js"
 import cookieParser from "cookie-parser";
+import blogRouter from "./routes/blogRoutes.js"
 const app = express();
 
 app.use(express.json())
@@ -19,6 +20,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/blog", blogRouter);
 
 app.use(errorHandler);
 
